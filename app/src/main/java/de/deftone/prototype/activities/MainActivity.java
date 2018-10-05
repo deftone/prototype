@@ -60,22 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //add burger icon for drawer to toolbar
-        DrawerLayout drawer = findViewById(R.id.drawer_main_activity_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
-                R.string.nav_open_drawer,
-                R.string.nav_close_drawer);
-        //add drawer toggle to drawer layout
-        drawer.addDrawerListener(toggle);
-        //sync state of burger icon on toolbar with state of the drawer
-        toggle.syncState();
-
-        //set listener to drawer
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override

@@ -1,21 +1,15 @@
 package de.deftone.prototype.activities;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import de.deftone.prototype.R;
-
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.concurrent.TimeUnit;
+import de.deftone.prototype.R;
 
 import static de.deftone.prototype.activities.ExerciseDetailActivity.EXTRA_EXERCISE_NAME;
 
@@ -23,12 +17,11 @@ public class AudioActivity extends AppCompatActivity {
 
     private TextView textMaxTime;
     private TextView textCurrentPosition;
-    private Button buttonPause;
-    private Button buttonStart;
+    private ImageButton buttonStart;
     private SeekBar seekBar;
     private Handler threadHandler = new Handler();
-
     private MediaPlayer mediaPlayer;
+    private boolean isPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +30,27 @@ public class AudioActivity extends AppCompatActivity {
 
         String audioName = getIntent().getExtras().getString(EXTRA_EXERCISE_NAME);
 
-
-        this.textCurrentPosition = (TextView) this.findViewById(R.id.textView_currentPosion);
-        this.textMaxTime = (TextView) this.findViewById(R.id.textView_maxTime);
-        this.buttonStart = (Button) this.findViewById(R.id.button_start);
-        this.buttonPause = (Button) this.findViewById(R.id.button_pause);
-
-        this.buttonPause.setEnabled(false);
-
-        this.seekBar = (SeekBar) this.findViewById(R.id.seekBar);
+        this.textCurrentPosition = this.findViewById(R.id.textView_currentPosion);
+        this.textMaxTime = this.findViewById(R.id.textView_maxTime);
+        this.buttonStart = this.findViewById(R.id.button_start);
+        this.seekBar = this.findViewById(R.id.seekBar);
         this.seekBar.setClickable(false);
 
-        // ID of 'mysong' in 'raw' folder.
+        // ID of 'audio' in 'raw' folder.
         int songId = this.getRawResIdByName(audioName);
 
         // Create MediaPlayer.
         this.mediaPlayer = MediaPlayer.create(this, songId);
+
+        // The duration in milliseconds
+        int duration = this.mediaPlayer.getDuration();
+        this.seekBar.setMax(duration);
+        String maxTimeString = this.millisecondsToString(duration);
+        this.textMaxTime.setText(maxTimeString);
+
+        //title
+        TextView title = findViewById(R.id.audio_title);
+        title.setText(audioName);
     }
 
     // Find ID of resource in 'raw' folder.
@@ -78,25 +76,18 @@ public class AudioActivity extends AppCompatActivity {
 
 
     public void doStart(View view) {
-        // The duration in milliseconds
-        int duration = this.mediaPlayer.getDuration();
-
-        int currentPosition = this.mediaPlayer.getCurrentPosition();
-        if (currentPosition == 0) {
-            this.seekBar.setMax(duration);
-            String maxTimeString = this.millisecondsToString(duration);
-            this.textMaxTime.setText(maxTimeString);
-        } else if (currentPosition == duration) {
-            // Resets the MediaPlayer to its uninitialized state.
-            this.mediaPlayer.reset();
+        if (!isPlaying) {
+            isPlaying = true;
+            buttonStart.setImageResource(R.drawable.icon_pause);
+            this.mediaPlayer.start();
+            // Create a thread to update position of SeekBar.
+            UpdateSeekBarThread updateSeekBarThread = new UpdateSeekBarThread();
+            threadHandler.postDelayed(updateSeekBarThread, 50);
+        } else {
+            isPlaying = false;
+            buttonStart.setImageResource(R.drawable.icon_play);
+            this.mediaPlayer.pause();
         }
-        this.mediaPlayer.start();
-        // Create a thread to update position of SeekBar.
-        UpdateSeekBarThread updateSeekBarThread = new UpdateSeekBarThread();
-        threadHandler.postDelayed(updateSeekBarThread, 50);
-
-        this.buttonPause.setEnabled(true);
-        this.buttonStart.setEnabled(false);
     }
 
     // Thread to Update position for SeekBar.
@@ -113,12 +104,6 @@ public class AudioActivity extends AppCompatActivity {
         }
     }
 
-    // When user click to "Pause".
-    public void doPause(View view) {
-        this.mediaPlayer.pause();
-        this.buttonPause.setEnabled(false);
-        this.buttonStart.setEnabled(true);
-    }
 
     // When user click to "Rewind".
     public void doRewind(View view) {
