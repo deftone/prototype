@@ -2,6 +2,9 @@ package de.deftone.prototype.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,15 +23,19 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import de.deftone.prototype.R;
 import de.deftone.prototype.data.Exercise;
 import de.deftone.prototype.helper.ExerciseDetailAddPoints;
 import de.deftone.prototype.helper.ExerciseDetailList;
 
 import static de.deftone.prototype.activities.MainActivity.ALL_AUDIOS;
+import static de.deftone.prototype.activities.MainActivity.ALL_PDFS;
 import static de.deftone.prototype.activities.MainActivity.ALL_PICTURES;
 import static de.deftone.prototype.activities.MainActivity.ALL_VIDEOS;
 import static de.deftone.prototype.activities.MainActivity.TYPE_AUDIO;
+import static de.deftone.prototype.activities.MainActivity.TYPE_PDF;
 import static de.deftone.prototype.activities.MainActivity.TYPE_PICTURE;
 import static de.deftone.prototype.activities.MainActivity.TYPE_VIDEO;
 import static de.deftone.prototype.data.Exercise.MUSCLE;
@@ -103,6 +110,14 @@ public class ExerciseDetailActivity extends AppCompatActivity {
                 buttonPlay.setVisibility(View.VISIBLE);
                 setExerciseData(ALL_AUDIOS.get(id));
                 break;
+
+            case TYPE_PDF:
+                buttonsWithPoints.setVisibility(View.GONE);
+                tableWitButtons.setVisibility(View.GONE);
+                buttonPlay.setVisibility(View.VISIBLE);
+                buttonPlay.setText("Show");
+                setExerciseData(ALL_PDFS.get(id));
+                break;
         }
     }
 
@@ -118,10 +133,6 @@ public class ExerciseDetailActivity extends AppCompatActivity {
     private void setToobar() {
         Toolbar toolbar = findViewById(R.id.toolbar_detail);
         toolbar.setTitle(title);
-        //in case i will ever need this:
-//        Now If you want to use CollapsingToolbarLayout and Toolbar together then you have to use setTitle() of CollapsingToolbarLayout
-//        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.confirm_order_mail_layout);
-//        collapsingToolbarLayout.setTitle("My Title");
 
         //show up arrow
         setSupportActionBar(toolbar);
@@ -204,19 +215,40 @@ public class ExerciseDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickShowVideo(View view) {
+    public void onClickShowPlay(View view) {
         Intent intent;
         String name;
-        if (exerciseType.equals(TYPE_VIDEO)) {
-            //open video activity
-            intent = new Intent(this, VideoActivity.class);
-            name = ALL_VIDEOS.get(id).getName();
-        } else {
-            intent = new Intent(this, AudioActivity.class);
-            name = ALL_AUDIOS.get(id).getName();
+        switch (exerciseType) {
+            case TYPE_VIDEO:
+                //open video activity
+                intent = new Intent(this, VideoActivity.class);
+                name = ALL_VIDEOS.get(id).getName();
+                intent.putExtra(EXTRA_EXERCISE_NAME, name);
+                startActivity(intent);
+                break;
+            case TYPE_AUDIO:
+                //open autio activity
+                intent = new Intent(this, AudioActivity.class);
+                name = ALL_AUDIOS.get(id).getName();
+                intent.putExtra(EXTRA_EXERCISE_NAME, name);
+                startActivity(intent);
+                break;
+            default:
+                //open pdf viewer, if extistng
+                String path = "drawable/testing_pdf.png";
+                intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(path));
+                intent.setType("application/pdf");
+                PackageManager pm = getPackageManager();
+                List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
+                if (activities.size() > 0) {
+                    startActivity(intent);
+                } else {
+                    Toast toast = Toast.makeText(this, "no viewer!", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                break;
         }
-        intent.putExtra(EXTRA_EXERCISE_NAME, name);
-        startActivity(intent);
     }
 
     private void changeButtonAndShowToast(Button button, int points) {

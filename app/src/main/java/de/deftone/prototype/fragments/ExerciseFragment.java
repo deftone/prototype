@@ -63,6 +63,12 @@ public class ExerciseFragment extends Fragment {
                         exerciseImages.add(exercise.getImageResourceId());
                     }
                     break;
+                case TYPE_PDF:
+                    for (Exercise exercise : ALL_PDFS) {
+                        exerciseNames.add(exercise.getName());
+                        exerciseImages.add(exercise.getImageResourceId());
+                    }
+                    break;
             }
         }
 

@@ -112,7 +112,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@layout/style_shape_rounded_corners_blue"
-                android:onClick="onClickShowVideo"
+                android:onClick="onClickShowPlay"
                 android:text="Play"
                 android:textColor="@color/white" />
 
