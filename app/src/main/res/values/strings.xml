@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Prototype</string>
+
+    <string name="create_order">Create Order</string>
+    <string name="action_share">Share</string>
+
+    <string name="title_top">Top fragment</string>
+    <string name="home_tab">HOME</string>
+    <string name="beine_tab">Beine</string>
+    <string name="bauch_tab">Bauch</string>
+    <string name="ruecken_tab">Rücken</string>
+    <string name="stretching_tab">Dehnen</string>
+
+    <string name="order_name_hint">Please enter your name</string>
+    <string name="order_detail_hint">Please enter your order</string>
+
+    <string name="top_fragment_1">Prototype for Stefaan</string>
+    <string name="home_text">Just play with the app</string>
+
+    <string name="nav_open_drawer">Open navigation drawer</string>
+    <string name="nav_close_drawer">Close navigation drawer</string>
+
+    <string name="random_programs">Zufallsprogramme</string>
+    <string name="random_mix_long">Mix lang (26 Übungen)</string>
+    <string name="random_mix_medium">Mix mittel (18 Übungen)</string>
+    <string name="random_mix_short">Mix kurz (10 Übungen)</string>
+    <string name="random_legs">Beine (6 Übungen)</string>
+    <string name="random_belly">Bauch (6 Übungen)</string>
+    <string name="random_back">Rücken (6 Übungen)</string>
+    <string name="random_combi">Combi (6 Übungen)</string>
+
+    <string name="statistic">Statistik</string>
+    <string name="statistic_points_4">Punkte (4 Wochen)</string>
+    <string name="statistic_points_12">Punkte (12 Wochen)</string>
+    <string name="statistic_points_10">Punkte (letze 10)</string>
+    <string name="statistic_points_all">Punkte (alle)</string>
+    <string name="graph_points_10">Gesamtpunkte der letzten 10 Workouts</string>
+    <string name="graph_points_all">Gesamtpunkte aller bisherigen Workouts</string>
+    <string name="graph_points_4">Gesamtpunkte der Workouts der letzen 4 Wochen</string>
+    <string name="graph_points_12">Gesamtpunkte pro Workouts der letzen 12 Wochen</string>
+    <string name="details">Details:</string>
+    <string name="nothing_to_show">Bisher keine Punkte gesammelt… los gehts!</string>
+
+    <string name="settings">Einstellungen</string>
+    <string name="delete_all_points">alle Punkte löschen</string>
+    <string name="delete_points_title">Alle Punkte löschen?</string>
+    <string name="delete_points_message">Bist du sicher? Diese Aktion kann nicht rückgängig gemacht werden!</string>
+
+    <string name="share_text">Want to join me working out?</string>
+
+    <string name="points">Wieviele Sätze der Übung hast du erfolgreich beendet?</string>
+    <string name="points_alternative">Wieviele Sätze der (einfachen) Übung hast du erfolgreich beendet?</string>
+    <string name="description">Übungsanleitung</string>
+    <string name="start">start</string>
+    <string name="pause">pause</string>
+    <string name="stop">stop</string>
+    <string name="reset">reset</string>
+    <string name="x_axis">Datum</string>
+    <string name="y_axis">Punkte</string>
+    <string name="points_today_1">Du hast heute bisher\ </string>
+    <string name="points_today_2">\ Punkte erreicht!</string>
+    <string name="combi_tab">Kombi</string>
+</resources>
