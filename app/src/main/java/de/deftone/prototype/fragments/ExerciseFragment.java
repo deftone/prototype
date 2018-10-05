@@ -57,6 +57,12 @@ public class ExerciseFragment extends Fragment {
                         exerciseImages.add(exercise.getImageResourceId());
                     }
                     break;
+                case TYPE_AUDIO:
+                    for (Exercise exercise : ALL_AUDIOS) {
+                        exerciseNames.add(exercise.getName());
+                        exerciseImages.add(exercise.getImageResourceId());
+                    }
+                    break;
             }
         }
 

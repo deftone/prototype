@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 import de.deftone.prototype.R;
+import de.deftone.prototype.data.AudioData;
 import de.deftone.prototype.data.Exercise;
 import de.deftone.prototype.data.LegExerciseData;
 import de.deftone.prototype.data.VideoData;
@@ -39,10 +40,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final List<Exercise> ALL_PICTURES = LegExerciseData.getAllLegExercises();
     public static final List<Exercise> ALL_VIDEOS = VideoData.getAllVideos();
+    public static final List<Exercise> ALL_AUDIOS = AudioData.getAllAudios();
 
     public final static String TYPE = "type";
     public final static String TYPE_PICTURE = "picture tab";
     public final static String TYPE_VIDEO = "video tab";
+    public final static String TYPE_AUDIO = "audio tab";
 
     private ShareActionProvider shareActionProvider;
 
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.getTabAt(0).setText("Home");
         tabLayout.getTabAt(1).setText("Picture");
         tabLayout.getTabAt(2).setText("Video");
+        tabLayout.getTabAt(3).setText("Audio");
 
         //das hier sollte gar nicht sein... denn das letzte fragment aufrufen, keinen neuen intent starten!!
         //set correct tab - when mainActivity is called from ExerciseDetailActivity (upArrow)
@@ -105,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case TYPE_VIDEO:
                     viewPagerItem = 2;
+                    break;
+                case TYPE_AUDIO:
+                    viewPagerItem = 3;
                     break;
                 default:
                     viewPagerItem = 0;
@@ -136,13 +143,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     bundle.putString(TYPE, TYPE_VIDEO);
                     videoFragment.setArguments(bundle);
                     return videoFragment;
+                case 3:
+                    ExerciseFragment audioFragment = new ExerciseFragment();
+                    bundle.putString(TYPE, TYPE_AUDIO);
+                    audioFragment.setArguments(bundle);
+                    return audioFragment;
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 

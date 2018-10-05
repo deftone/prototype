@@ -25,8 +25,10 @@ import de.deftone.prototype.data.Exercise;
 import de.deftone.prototype.helper.ExerciseDetailAddPoints;
 import de.deftone.prototype.helper.ExerciseDetailList;
 
+import static de.deftone.prototype.activities.MainActivity.ALL_AUDIOS;
 import static de.deftone.prototype.activities.MainActivity.ALL_PICTURES;
 import static de.deftone.prototype.activities.MainActivity.ALL_VIDEOS;
+import static de.deftone.prototype.activities.MainActivity.TYPE_AUDIO;
 import static de.deftone.prototype.activities.MainActivity.TYPE_PICTURE;
 import static de.deftone.prototype.activities.MainActivity.TYPE_VIDEO;
 import static de.deftone.prototype.data.Exercise.MUSCLE;
@@ -93,6 +95,13 @@ public class ExerciseDetailActivity extends AppCompatActivity {
                 tableWitButtons.setVisibility(View.GONE);
                 buttonPlay.setVisibility(View.VISIBLE);
                 setExerciseData(ALL_VIDEOS.get(id));
+                break;
+
+            case TYPE_AUDIO:
+                buttonsWithPoints.setVisibility(View.GONE);
+                tableWitButtons.setVisibility(View.GONE);
+                buttonPlay.setVisibility(View.VISIBLE);
+                setExerciseData(ALL_AUDIOS.get(id));
                 break;
         }
     }
@@ -195,10 +204,17 @@ public class ExerciseDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickShowVideo(View view){
-        //open video activity
-        Intent intent = new Intent(this, VideoActivity.class);
-        String name = ALL_VIDEOS.get(id).getName();
+    public void onClickShowVideo(View view) {
+        Intent intent;
+        String name;
+        if (exerciseType.equals(TYPE_VIDEO)) {
+            //open video activity
+            intent = new Intent(this, VideoActivity.class);
+            name = ALL_VIDEOS.get(id).getName();
+        } else {
+            intent = new Intent(this, AudioActivity.class);
+            name = ALL_AUDIOS.get(id).getName();
+        }
         intent.putExtra(EXTRA_EXERCISE_NAME, name);
         startActivity(intent);
     }

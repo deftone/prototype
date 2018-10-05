@@ -50,7 +50,7 @@
 
     <string name="points">Wieviele Sätze der Übung hast du erfolgreich beendet?</string>
     <string name="points_alternative">Wieviele Sätze der (einfachen) Übung hast du erfolgreich beendet?</string>
-    <string name="description">Übungsanleitung</string>
+    <string name="description">Description/Details:</string>
     <string name="start">start</string>
     <string name="pause">pause</string>
     <string name="stop">stop</string>
