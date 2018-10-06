@@ -82,7 +82,7 @@ public class ExerciseFragment extends Fragment {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), ExerciseDetailActivity.class);
-                intent.putExtra(EXTRA_EXERCISE_ID, position);
+                intent.putExtra(EXTRA_EXERCISE_ID, position);  //todo!
                 intent.putExtra(EXTRA_EXERCISE_TYPE, bundle.getString(TYPE));
                 getActivity().startActivity(intent);
             }

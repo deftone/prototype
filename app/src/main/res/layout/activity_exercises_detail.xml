@@ -116,6 +116,31 @@
                 android:text="Play"
                 android:textColor="@color/white" />
 
+            <Button
+                android:id="@+id/show_pdf_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@layout/style_shape_rounded_corners_blue"
+                android:onClick="onClickShowPDF1"
+                android:text="Show 1"
+                android:textColor="@color/white" />
+
+
+            <Button
+                android:id="@+id/show_pdf_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@layout/style_shape_rounded_corners_blue"
+                android:onClick="onClickShowPdf2"
+                android:text="Show 2"
+                android:textColor="@color/white" />
+
         </LinearLayout>
 
 

@@ -12,14 +12,14 @@ public class PDFData {
     public static List<Exercise> getAllPDFs() {
         List<Exercise> exercises = new ArrayList<>();
 
-        exercises.add(new Exercise(0, PDF, "testing", getIcons(),
+        exercises.add(new Exercise(R.raw.presentation, PDF, "testing", getIcons(),
                 getDescTesting(), R.drawable.testing_pdf, 0, new int[]{2}));
 
         return exercises;
     }
 
     private static String[] getIcons() {
-        return new String[]{BULLET, BULLET,  BULLET};
+        return new String[]{BULLET, BULLET, BULLET};
     }
 
     private static String[] getDescTesting() {

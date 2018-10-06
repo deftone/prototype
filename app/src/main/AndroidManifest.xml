@@ -18,7 +18,19 @@
         </activity>
         <activity android:name=".activities.ExerciseDetailActivity" />
         <activity android:name=".activities.VideoActivity" />
-        <activity android:name=".activities.AudioActivity"></activity>
+        <activity android:name=".activities.AudioActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+        <!-- android:authorities="de.deftone.prototype.activities.ExerciseDetailActivity" -->
+        <activity android:name=".activities.PDFActivity"></activity>
     </application>
 
 </manifest>

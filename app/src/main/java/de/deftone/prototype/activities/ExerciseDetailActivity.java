@@ -1,12 +1,16 @@
 package de.deftone.prototype.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -23,8 +27,14 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import de.deftone.prototype.BuildConfig;
 import de.deftone.prototype.R;
 import de.deftone.prototype.data.Exercise;
 import de.deftone.prototype.helper.ExerciseDetailAddPoints;
@@ -89,11 +99,15 @@ public class ExerciseDetailActivity extends AppCompatActivity {
         TextView buttonsWithPoints = findViewById(R.id.text_points);
         TableLayout tableWitButtons = findViewById(R.id.table_buttons);
         Button buttonPlay = findViewById(R.id.show_Video);
+        Button buttonShow1 = findViewById(R.id.show_pdf_1);
+        Button buttonShow2 = findViewById(R.id.show_pdf_2);
         switch (type) {
             case TYPE_PICTURE:
                 buttonsWithPoints.setVisibility(View.VISIBLE);
                 tableWitButtons.setVisibility(View.VISIBLE);
                 buttonPlay.setVisibility(View.GONE);
+                buttonShow1.setVisibility(View.GONE);
+                buttonShow2.setVisibility(View.GONE);
                 setExerciseData(ALL_PICTURES.get(id));
                 break;
 
@@ -101,6 +115,8 @@ public class ExerciseDetailActivity extends AppCompatActivity {
                 buttonsWithPoints.setVisibility(View.GONE);
                 tableWitButtons.setVisibility(View.GONE);
                 buttonPlay.setVisibility(View.VISIBLE);
+                buttonShow1.setVisibility(View.GONE);
+                buttonShow2.setVisibility(View.GONE);
                 setExerciseData(ALL_VIDEOS.get(id));
                 break;
 
@@ -108,14 +124,17 @@ public class ExerciseDetailActivity extends AppCompatActivity {
                 buttonsWithPoints.setVisibility(View.GONE);
                 tableWitButtons.setVisibility(View.GONE);
                 buttonPlay.setVisibility(View.VISIBLE);
+                buttonShow1.setVisibility(View.GONE);
+                buttonShow2.setVisibility(View.GONE);
                 setExerciseData(ALL_AUDIOS.get(id));
                 break;
 
             case TYPE_PDF:
                 buttonsWithPoints.setVisibility(View.GONE);
                 tableWitButtons.setVisibility(View.GONE);
-                buttonPlay.setVisibility(View.VISIBLE);
-                buttonPlay.setText("Show");
+                buttonPlay.setVisibility(View.GONE);
+                buttonShow1.setVisibility(View.VISIBLE);
+                buttonShow2.setVisibility(View.VISIBLE);
                 setExerciseData(ALL_PDFS.get(id));
                 break;
         }
@@ -233,21 +252,55 @@ public class ExerciseDetailActivity extends AppCompatActivity {
                 intent.putExtra(EXTRA_EXERCISE_NAME, name);
                 startActivity(intent);
                 break;
-            default:
-                //open pdf viewer, if extistng
-                String path = "drawable/testing_pdf.png";
-                intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(path));
-                intent.setType("application/pdf");
-                PackageManager pm = getPackageManager();
-                List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
-                if (activities.size() > 0) {
-                    startActivity(intent);
-                } else {
-                    Toast toast = Toast.makeText(this, "no viewer!", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                break;
+        }
+    }
+
+    public void onClickShowPDF1(View view) {
+        Intent intent = new Intent(this, PDFActivity.class);
+        //todo: id als int extra uebergeben
+        startActivity(intent);
+    }
+
+    public void onClickShowPdf2(View view) {
+        //file needs to be copied to internal storage, otherwise, it will be empty
+        File file = new File(context.getFilesDir(), "temporary.pdf");
+        try {
+            int pdfId = R.raw.presentation; //id funktioniertnicht, weil das die position ist und null
+            InputStream inputStream = getResources().openRawResource(pdfId);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buf)) > 0) {
+                fileOutputStream.write(buf, 0, len);
+            }
+
+            fileOutputStream.close();
+            inputStream.close();
+        } catch (Exception e) {
+            System.out.println("ha");
+        }
+
+        //try fileprovider https://infinum.co/the-capsized-eight/share-files-using-fileprovider
+
+        // create new Intent
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        // generate URI, I defined authority as the application ID in the Manifest, the last param is file I want to open
+        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, file);
+
+        // I am opening a PDF file so I give it a valid MIME type
+        intent.setDataAndType(uri, "application/pdf");
+
+        // set flag to give temporary permission to external app to use your FileProvider
+        //without this, intent closes immediately
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        // validate that the device can open your File!
+        PackageManager pm = getPackageManager();
+        if (intent.resolveActivity(pm) != null) {
+            startActivity(intent);
         }
     }
 
