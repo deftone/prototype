@@ -15,6 +15,9 @@ public class PDFData {
         exercises.add(new Exercise(R.raw.presentation, PDF, "testing", getIcons(),
                 getDescTesting(), R.drawable.testing_pdf, 0, new int[]{2}));
 
+        exercises.add(new Exercise(R.raw.cv, PDF, "CV", getIcons(),
+                getDescCV(), R.drawable.cv, 0, new int[]{2}));
+
         return exercises;
     }
 
@@ -28,5 +31,10 @@ public class PDFData {
                 "and some more "};
     }
 
+    private static String[] getDescCV() {
+        return new String[]{"my cv",
+                "bla bla bla",
+                "and some more "};
+    }
 
 }

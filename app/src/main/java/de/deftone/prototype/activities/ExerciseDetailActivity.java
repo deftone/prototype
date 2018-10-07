@@ -257,15 +257,16 @@ public class ExerciseDetailActivity extends AppCompatActivity {
 
     public void onClickShowPDF1(View view) {
         Intent intent = new Intent(this, PDFActivity.class);
-        //todo: id als int extra uebergeben
+        intent.putExtra(EXTRA_EXERCISE_ID, ALL_PDFS.get(id).getId());
+        intent.putExtra(EXTRA_EXERCISE_NAME, ALL_PDFS.get(id).getName());
         startActivity(intent);
     }
 
     public void onClickShowPdf2(View view) {
         //file needs to be copied to internal storage, otherwise, it will be empty
-        File file = new File(context.getFilesDir(), "temporary.pdf");
+        File file = new File(context.getFilesDir(), ALL_PDFS.get(id).getName());
         try {
-            int pdfId = R.raw.presentation; //id funktioniertnicht, weil das die position ist und null
+            int pdfId = ALL_PDFS.get(id).getId();
             InputStream inputStream = getResources().openRawResource(pdfId);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
@@ -277,30 +278,31 @@ public class ExerciseDetailActivity extends AppCompatActivity {
 
             fileOutputStream.close();
             inputStream.close();
-        } catch (Exception e) {
-            System.out.println("ha");
-        }
 
-        //try fileprovider https://infinum.co/the-capsized-eight/share-files-using-fileprovider
 
-        // create new Intent
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+            //try fileprovider https://infinum.co/the-capsized-eight/share-files-using-fileprovider
 
-        // generate URI, I defined authority as the application ID in the Manifest, the last param is file I want to open
-        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, file);
+            // create new Intent
+            Intent intent = new Intent(Intent.ACTION_VIEW);
 
-        // I am opening a PDF file so I give it a valid MIME type
-        intent.setDataAndType(uri, "application/pdf");
+            // generate URI, I defined authority as the application ID in the Manifest, the last param is file I want to open
+            Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, file);
 
-        // set flag to give temporary permission to external app to use your FileProvider
-        //without this, intent closes immediately
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            // I am opening a PDF file so I give it a valid MIME type
+            intent.setDataAndType(uri, "application/pdf");
+
+            // set flag to give temporary permission to external app to use your FileProvider
+            //without this, intent closes immediately
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-        // validate that the device can open your File!
-        PackageManager pm = getPackageManager();
-        if (intent.resolveActivity(pm) != null) {
-            startActivity(intent);
+            // validate that the device can open your File!
+            PackageManager pm = getPackageManager();
+            if (intent.resolveActivity(pm) != null) {
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            System.out.println("there is a problem with opening the pdf file :C");
         }
     }
 
